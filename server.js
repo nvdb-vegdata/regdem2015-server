@@ -1,7 +1,7 @@
 var express = require('express')
 , bodyParser = require('body-parser');
 
-var cookieMonster = require('./lib/cookieMonster');
+var cookieMonster = require('./lib/CookieMonster');
 
 var app = express()
 , port = process.env.PORT || 8085

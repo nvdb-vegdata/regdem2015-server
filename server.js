@@ -46,7 +46,7 @@ router.route('/call')
 
   });
 
-app.use('/app', express.static('app'));
+app.use('/app', express.static('regdem2015'));
 
 // Path starts with /api
 app.use('/api', router);

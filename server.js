@@ -11,33 +11,36 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-router.get('/', function (req, res) {
+router.get('/test', function (req, res) {
   res.json({ message: 'Running' });
 });
 
-router.get('/status', function (req, res, next) {
-  var options = {
-    path: '/nvdb/apiskriv/status'
-  };
-
-  cookieMonster.getData(function (data) {
-    res.json({ response: data.toString() });
-  }, options);
-});
-
-router.route('/call')
+router.route('/')
   .get(function (req, res, next) {
-    res.json({ response: req.body.name || 'heiaa' });
-  })
-  .post(function (req, res, next) {
     var options = {
-      method: 'POST',
-      body: JSON.stringify(req.body.content)
+      path: '/nvdb/apiskriv/status'
     };
 
-    if (req.body.url) {
-      options['path'] = req.body.url;
+    cookieMonster.getData(function (data) {
+      res.json({ response: data.toString() });
+    }, options);
+  })
+  .post(function (req, res, next) {
+    if (req.body.content === undefined || req.body.content.length === 0) {
+      res.json({error: 'Failed: no content'})
+      return;
     }
+
+    if (req.body.url === undefined || req.body.url.length === 0) {
+      res.json({error: 'Failed: no URL'})
+      return;
+    }
+
+    var options = {
+      method: 'POST',
+      body: JSON.stringify(req.body.content),
+      path: req.body.url
+    };
 
     cookieMonster.getData(options, function (data) {
       console.log(data.toString());

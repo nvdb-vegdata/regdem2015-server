@@ -46,6 +46,8 @@ router.route('/call')
 
   });
 
+app.use('/app', express.static('app'));
+
 // Path starts with /api
 app.use('/api', router);
 

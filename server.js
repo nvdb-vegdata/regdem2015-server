@@ -39,7 +39,8 @@ router.route('/')
     var options = {
       method: 'POST',
       body: JSON.stringify(req.body.content),
-      path: req.body.url
+      path: req.body.url,
+      dryrun: req.body.dryrun || false
     };
 
     cookieMonster.getData(options, function (data) {

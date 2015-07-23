@@ -37,7 +37,7 @@ router.route('/')
     }
 
     var options = {
-      method: 'POST',
+      method: req.body.method || 'POST',
       body: JSON.stringify(req.body.content),
       path: req.body.url,
       dryrun: req.body.dryrun || false

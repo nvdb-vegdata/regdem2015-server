@@ -45,7 +45,7 @@ router.route('/')
 
     cookieMonster.getData(options, function (data) {
       console.log(data.toString());
-      res.send(data.toString() );
+      res.json(JSON.parse(data.toString()));
     });
 
   });

@@ -1,7 +1,7 @@
 var express = require('express')
 , bodyParser = require('body-parser');
 
-var cookieMonster = require('./lib/CookieMonster');
+var CookieMonster = require('./lib/CookieMonster');
 
 var app = express()
 , port = process.env.PORT || 8085
@@ -21,7 +21,8 @@ router.route('/')
       path: '/nvdb/apiskriv/status'
     };
 
-    cookieMonster.getData(function (data) {
+    var cm = new CookieMonster();
+    cm.getData(function (data) {
       res.json({ response: data.toString() });
     }, options);
   })
@@ -43,7 +44,8 @@ router.route('/')
       dryrun: req.body.dryrun || false
     };
 
-    cookieMonster.getData(options, function (data) {
+    var cm = new CookieMonster();
+    cm.getData(options, function (data) {
       console.log(data.toString());
       res.json(JSON.parse(data.toString()));
     });

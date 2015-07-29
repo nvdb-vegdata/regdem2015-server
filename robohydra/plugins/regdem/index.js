@@ -15,6 +15,28 @@ var transform_url = function (url) {
   return url;
 };
 
+var get_egenskap = function (body, egenskaper) {
+  var egenskaper  = {}
+  , egenskap      = null
+
+  // mindre robhust måte å få henta ut data med
+  if (body.content.registrer !== undefined) {
+    egenskaper = body.content.registrer.vegObjekter[0].egenskaper;
+  }
+  else if (body.content.delvisOppdater !== undefined) {
+    egenskaper = body.content.delvisOppdater.vegObjekter[0].egenskaper;
+  }
+
+  for (e in egenskaper) {
+    if (egenskaper[e].typeId === 10288) {
+      egenskap = parseInt(egenskaper[e].verdi[0]);
+      break;
+    }
+  }
+
+  return egenskap;
+};
+
 exports.getBodyParts = function (conf) {
   return {
     heads: [
@@ -27,16 +49,10 @@ exports.getBodyParts = function (conf) {
           switch (transform_url(body.url)) {
             case '/nvdb/apiskriv/v2/endringssett/validator':
               setTimeout(function () {
-                var egenskaper  = body.content.registrer.vegObjekter[0].egenskaper
-                , egenskap      = null
-                , error         = 0;
+                console.log('VALIDATOR');
 
-                for (e in egenskaper) {
-                  if (egenskaper[e].typeId === 10288) {
-                    egenskap = parseInt(egenskaper[e].verdi[0]);
-                    break;
-                  }
-                }
+                var egenskap = get_egenskap(body)
+                , error = 0;
 
                 if (egenskap === null) {
                   error = 1;
@@ -49,9 +65,9 @@ exports.getBodyParts = function (conf) {
                 }
 
                 switch (error) {
-                  case 1:   result = data.validator.missing;  break;
-                  case 2:   result = data.validator.less;     break;
-                  case 3:   result = data.validator.more;     break;
+                  case 1:   result = data.validator.missing;    break;
+                  case 2:   result = data.validator.less;       break;
+                  case 3:   result = data.validator.more;       break;
                   default:  result = data.validator.success;
                 }
 
@@ -61,6 +77,8 @@ exports.getBodyParts = function (conf) {
 
             case '/nvdb/apiskriv/v2/endringssett':
               setTimeout(function () {
+                console.log('SEND ENDRINGSSETT');
+
                 result = data.endringssett.success;
                 res.send(JSON.stringify(result))
               }, 1500);
@@ -68,6 +86,8 @@ exports.getBodyParts = function (conf) {
 
             case '/nvdb/apiskriv/v2/endringssett/start':
               setTimeout(function () {
+                console.log('START');
+
                 result = data.start.success;
                 res.send(JSON.stringify(result))
               }, 1000);
@@ -75,9 +95,11 @@ exports.getBodyParts = function (conf) {
 
             case '/nvdb/apiskriv/v2/endringssett/fremdrift':
               setTimeout(function () {
+                console.log('FREMDRIFT: ' + result);
+
                 result = Math.floor(Math.random() * 2) === 0 ? data.fremdrift.working : data.fremdrift.success
                 res.send(JSON.stringify(result))
-              }, 600);
+              }, 900);
               break
 
             default:

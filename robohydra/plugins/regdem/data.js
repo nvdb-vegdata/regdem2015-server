@@ -147,6 +147,38 @@ module.exports = {
   ----------------------------------------------------------------------------*/
   fremdrift: {
     working: 'BEHANDLER',
-    success: 'UTFØRT'
+    success: 'UTFØRT',
+    err: 'AVVIST'
+  },
+
+  status: {
+    status: {
+      "mottatt": "2015-07-29T14:55:02.276",
+      "fremdrift": "AVVIST",
+      "avvistårsak": "VALIDERINGSFEIL",
+      "resultat": {
+        "feil":[],
+        "advarsel":[],
+        "vegObjekter":[
+          {
+            "feil":[
+              {
+                "melding": "Versjon oppgitt for oppdatering er ikke aktiv versjon. Aktiv versjon er 2",
+                "kode": "VERSJONSKONFLIKT"
+              }
+            ],
+            "advarsel":[
+              {
+                "melding": "Objektet, av typen 103 (Fartsdemper), mangler anbefalte egenskaper: [Byggeår (10288)]",
+                "kode": "MANGLER_ANBEFALTE_EGENSKAPER",
+                "referanse": "http://labs.vegdata.no/nvdb-datakatalog/103"
+              }
+            ],
+            "nvdbId":489331933
+          }
+        ]
+      },
+      "eier": "extscs"
+    }
   }
 }

@@ -7,7 +7,7 @@ var data = require('./data');
 var transform_url = function (url) {
   var fragments = url.split('/');
 
-  if (['fremdrift', 'start'].indexOf(fragments[fragments.length - 1]) > -1) {
+  if (['fremdrift', 'start', 'status'].indexOf(fragments[fragments.length - 1]) > -1) {
     fragments.splice(fragments.length - 2, 1);
     return fragments.join('/');
   }
@@ -95,12 +95,28 @@ exports.getBodyParts = function (conf) {
 
             case '/nvdb/apiskriv/v2/endringssett/fremdrift':
               setTimeout(function () {
-                console.log('FREMDRIFT: ' + result);
 
-                result = Math.floor(Math.random() * 2) === 0 ? data.fremdrift.working : data.fremdrift.success
+                var random = Math.floor(Math.random() * 3);
+                console.log('FREMDRIFT: ' + random);
+
+                switch (random) {
+                  case 1: result = data.fremdrift.working;      break;
+                  case 2: result = data.fremdrift.err;          break;
+                  default: result = data.fremdrift.success;
+                }
+
                 res.send(JSON.stringify(result))
               }, 900);
               break
+
+            case '/nvdb/apiskriv/v2/endringssett/status':
+              setTimeout(function () {
+                 result = data.status.status;
+                 res.send(JSON.stringify(result));
+              }, 300)
+
+              break;
+
 
             default:
               res.send(JSON.stringify(data.fremdrift.success));
